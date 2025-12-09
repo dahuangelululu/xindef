@@ -41,19 +41,49 @@ extern "C"
 #include "iseg_yolov8_pp_if.h"
 #include "iseg_pp_output_if.h"
 #include "sseg_deeplabv3_pp_if.h"
-#include "sseg_pp_output_if.h"
-
+//#include "sseg_pp_output_if.h"
+#include <stdint.h>
 #define POSTPROCESS_OD_YOLO_V2_UF       (10) /* Yolov2 postprocessing; Input model: uint8; output: float32         */
 #define POSTPROCESS_OD_YOLO_V5_UU       (11) /* Yolov5 postprocessing; Input model: uint8; output: uint8           */
 #define POSTPROCESS_OD_YOLO_V8_UF       (12) /* Yolov8 postprocessing; Input model: uint8; output: float32         */
 #define POSTPROCESS_OD_YOLO_V8_UI       (13) /* Yolov8 postprocessing; Input model: uint8; output: int8            */
 #define POSTPROCESS_OD_ST_YOLOX_UF      (14) /* ST YoloX postprocessing; Input model: uint8; output: float32       */
 #define POSTPROCESS_OD_ST_SSD_UF        (15) /* ST SSD postprocessing; Input model: uint8; output: float32         */
+#define POSTPROCESS_OD_METER_YOLOV5_UI   (90) /* Meter detector (YOLOv5 + 4 landmarks); Input model: uint8; output: int8 */
 #define POSTPROCESS_MPE_YOLO_V8_UF      (20) /* Yolov8 postprocessing; Input model: uint8; output: float32         */
 #define POSTPROCESS_MPE_PD_UF           (21) /* Palm detector postprocessing; Input model: uint8; output: float32  */
 #define POSTPROCESS_SPE_MOVENET_UF      (22) /* Movenet postprocessing; Input model: uint8; output: float32        */
 #define POSTPROCESS_ISEG_YOLO_V8_UI     (30) /* Yolov8 Seg postprocessing; Input model: uint8; output: int8        */
 #define POSTPROCESS_SSEG_DEEPLAB_V3_UF  (40) /* Deeplabv3 Seg postprocessing; Input model: uint8; output: float32  */
+
+typedef struct
+{
+  float conf_threshold;
+  float iou_threshold;
+  uint32_t num_boxes;
+  uint32_t max_boxes_limit;
+  int32_t input_width;
+  int32_t input_height;
+  float out_scale;
+  int32_t out_zero_point;
+} meter_pp_static_param_t;
+
+typedef struct
+{
+  float x_center;
+  float y_center;
+  float width;
+  float height;
+  float score;
+  int32_t class_index;
+  float keypoints[4][2];
+} meter_pp_detection_t;
+
+typedef struct
+{
+  meter_pp_detection_t *pOutBuff;
+  uint32_t nb_detect;
+} meter_pp_out_t;
 
 /* Exported functions ------------------------------------------------------- */
 int32_t app_postprocess_init(void *params_postprocess);

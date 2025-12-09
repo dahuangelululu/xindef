@@ -29,5 +29,17 @@ void app_camera_display_pipe_set_address(uint8_t *display_pipe_destination);
 void app_camera_nn_pipe_start(uint8_t *nn_pipe_destination, uint32_t capture_mode);
 void app_camera_nn_pipe_set_address(uint8_t *nn_pipe_destination);
 void app_camera_isp_update(void);
+uint32_t app_camera_get_sensor_width(void);
+uint32_t app_camera_get_sensor_height(void);
 
+typedef struct
+{
+    uint32_t sensor_width;
+    uint32_t sensor_height;
+    uint32_t start_count_display;
+    uint32_t start_count_nn;
+    uint32_t last_start_ms;
+} app_camera_diag_t;
+
+void app_camera_get_diag(app_camera_diag_t *diag);
 #endif

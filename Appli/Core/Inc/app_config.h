@@ -38,17 +38,27 @@
 
 #define BQUEUE_MAX_BUFFERS                      2
 
-#define NN_WIDTH                                224
-#define NN_HEIGHT                               224
+#define NN_WIDTH                                416
+#define NN_HEIGHT                               416
 #define NN_FORMAT                               DCMIPP_PIXEL_PACKER_FORMAT_RGB888_YUV444_1
 #define NN_BPP                                  3
-#define NN_BUFFER_OUT_SIZE                      5880
-#define NN_CLASSES                              2
-#define NN_CLASSES_TABLE                        {"person", "not_person"}
+#define NN_BUFFER_OUT_SIZE                      149072
+#define NN_CLASSES                              1
+#define NN_CLASSES_TABLE                        {"meter"}
 
-#define POSTPROCESS_TYPE                        POSTPROCESS_OD_YOLO_V2_UF
-#define AI_OBJDETECT_YOLOV2_PP_CONF_THRESHOLD   0.6f
-#define AI_OBJDETECT_YOLOV2_PP_IOU_THRESHOLD    0.3f
-#define AI_OBJDETECT_YOLOV2_PP_MAX_BOXES_LIMIT  10
+#define POSTPROCESS_TYPE                        POSTPROCESS_OD_METER_YOLOV5_UI
+
+#define METER_PP_NUM_BOXES                      10647U
+#define METER_PP_MAX_BOXES_LIMIT                50U
+#define METER_PP_CONF_THRESHOLD                 0.50f
+#define METER_PP_IOU_THRESHOLD                  0.50f
+#define METER_PP_OUT_SCALE                      3.8260221f
+#define METER_PP_OUT_ZERO_POINT                 (-96)
+
+#if POSTPROCESS_TYPE == POSTPROCESS_OD_METER_YOLOV5_UI
+#define APP_MAX_BOXES_LIMIT                     METER_PP_MAX_BOXES_LIMIT
+#else
+#define APP_MAX_BOXES_LIMIT                     AI_OBJDETECT_YOLOV2_PP_MAX_BOXES_LIMIT
+#endif
 
 #endif
